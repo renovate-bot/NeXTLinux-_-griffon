@@ -15,7 +15,7 @@ import (
 	"github.com/wagoodman/jotframe/pkg/frame"
 
 	"github.com/anchore/go-logger"
-	grypeEvent "github.com/nextlinux/griffon/griffon/event"
+	griffonEvent "github.com/nextlinux/griffon/griffon/event"
 	"github.com/nextlinux/griffon/internal/log"
 	"github.com/nextlinux/griffon/ui"
 )
@@ -78,12 +78,12 @@ func (h *ephemeralTerminalUI) Handle(event partybus.Event) error {
 			log.Errorf("unable to show %s event: %+v", event.Type, err)
 		}
 
-	case event.Type == grypeEvent.AppUpdateAvailable:
+	case event.Type == griffonEvent.AppUpdateAvailable:
 		if err := handleAppUpdateAvailable(ctx, h.frame, event, h.waitGroup); err != nil {
 			log.Errorf("unable to show %s event: %+v", event.Type, err)
 		}
 
-	case event.Type == grypeEvent.VulnerabilityScanningFinished:
+	case event.Type == griffonEvent.VulnerabilityScanningFinished:
 		// we need to close the screen now since signaling the the presenter is ready means that we
 		// are about to write bytes to stdout, so we should reset the terminal state first
 		h.closeScreen(false)
@@ -95,7 +95,7 @@ func (h *ephemeralTerminalUI) Handle(event partybus.Event) error {
 		// this is the last expected event, stop listening to events
 		return h.unsubscribe()
 
-	case event.Type == grypeEvent.NonRootCommandFinished:
+	case event.Type == griffonEvent.NonRootCommandFinished:
 		h.closeScreen(false)
 
 		if err := handleNonRootCommandFinished(event, h.reportOutput); err != nil {
